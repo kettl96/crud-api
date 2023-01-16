@@ -86,3 +86,38 @@ describe('operations in positive case', () => {
   });
 });
 
+describe('user not exist', () => {
+  it('should return new created user for the POST /api/users request', async () => {
+    const user = { username: 'User', age: 20, hobbies: ['postcrossing'] };
+    const response = await app.post('/api/users').send(user);
+
+    expect(response.statusCode).toBe(201);
+    expect(response.body.age).toBe(20);
+    expect(response.body.username).toBe('User');
+    expect(response.body.hobbies.length).toBe(1);
+    expect(response.body.hobbies.includes('postcrossing')).toBe(true);
+  });
+
+  const noExistId = v4();
+  it('should return 404 and corresponding message if user does not exist for the GET request', async () => {
+    const response = await app.get('/api/users/' + noExistId);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toBe(ErrorMessage.USER_NOT_FOUND);
+  });
+
+  it('should return 404 and corresponding message if user does not exist for the PUT request', async () => {
+    const user = { username: 'User', age: 30, hobbies: ['postcrossing', 'reading'] };
+    const response = await app.put('/api/users/' + noExistId).send(user);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toBe(ErrorMessage.USER_NOT_FOUND);
+  });
+
+  it('should return 404 and corresponding message if user does not exist for the DELETE request', async () => {
+    const response = await app.delete('/api/users/' + noExistId);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toBe(ErrorMessage.USER_NOT_FOUND);
+  });
+});
