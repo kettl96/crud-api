@@ -8,7 +8,8 @@
     "start:dev": "nodemon",
     "start:prod": "tsc && node ./dist/index.js",
     "start:multi": "tsc && node ./dist/index.js cluster",
-    "start": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/index.ts",
+    "test": "jest test/app.test.ts"
   },
   "repository": {
     "type": "git",
